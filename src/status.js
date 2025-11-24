@@ -1,5 +1,6 @@
 // src/status.js
 // Status Worker – визуализира KV логовете красиво с легенда и таблица, без графика, най-новите отгоре
+// Сега с главни букви за статуса за по-добра четимост
 
 export default {
   async fetch(request, env) {
@@ -22,6 +23,9 @@ export default {
       hour: "2-digit", minute: "2-digit", second: "2-digit"
     });
 
+    // Функция за показване на статуса с главна буква
+    const displayStatus = status => status.charAt(0).toUpperCase() + status.slice(1);
+
     // Обърнат ред за визуализация: най-новите отгоре
     const itemsReversed = [...items].reverse();
 
@@ -32,22 +36,31 @@ export default {
         <meta charset="UTF-8">
         <title>Uptime Monitor</title>
         <style>
+          /* Основни стилове */
           body { font-family: sans-serif; background: #f0f0f0; display: flex; justify-content: center; padding: 20px; }
           .container { max-width: 700px; width: 100%; text-align: center; }
           h1 { color: #4b4837; margin-bottom: 15px; }
+
+          /* Summary блок */
           .summary { margin-bottom: 20px; }
           .summary div { margin: 4px 0; }
           .summary .status { font-weight: bold; color: ${lastStatus === "up" ? "green" : "red"}; }
+
+          /* Таблица */
           table { border-collapse: collapse; width: 100%; margin-top: 20px; }
           th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
           th { background: #4b4837; color: #eeebd9; }
           td.up { color: green; font-weight: bold; }
           td.down { color: red; font-weight: bold; }
 
+          /* Легенда */
           .legend { margin-bottom: 15px; font-size: 0.9em; }
           .legend span { display: inline-block; margin-right: 10px; }
           .legend .up { color: green; font-weight: bold; }
           .legend .down { color: red; font-weight: bold; }
+
+          /* Предложение: може да добавиш hover ефект на редовете на таблицата за по-добра четимост */
+          tr:hover { background-color: #e0e0e0; }
         </style>
       </head>
       <body>
@@ -55,7 +68,7 @@ export default {
           <h1>Uptime Monitor</h1>
 
           <div class="summary">
-            <div>Последен статус: <span class="status">${lastStatus}</span></div>
+            <div>Последен статус: <span class="status">${displayStatus(lastStatus)}</span></div>
             <div>Общо записи: ${total}</div>
             <div>Up / Down: ${upCount} / ${downCount}</div>
             <div>Uptime %: ${uptimePercent}%</div>
@@ -68,7 +81,7 @@ export default {
 
           <table>
             <tr><th>Timestamp</th><th>Status</th></tr>
-            ${itemsReversed.map(i => `<tr><td>${formatDate(i.timestamp)}</td><td class="${i.status}">${i.status}</td></tr>`).join('')}
+            ${itemsReversed.map(i => `<tr><td>${formatDate(i.timestamp)}</td><td class="${i.status}">${displayStatus(i.status)}</td></tr>`).join('')}
           </table>
         </div>
       </body>
