@@ -1,0 +1,12 @@
+# wrangler.toml
+name = "uptime-monitor-status"
+main = "src/status.js"
+compatibility_date = "2025-11-24"
+
+workers_dev = true
+preview_urls = true
+
+# KV Namespace (споделен с Ping Worker)
+[[kv_namespaces]]
+binding = "UPTIME_LOG"
+id = "46095dfcaa87492ea5562d0741ad2f4a"
