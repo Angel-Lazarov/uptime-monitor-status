@@ -1,5 +1,5 @@
 # wrangler.toml
-name = "uptime-monitor-status"
+name = "uptime-status"
 main = "src/status.js"
 compatibility_date = "2025-11-24"
 
